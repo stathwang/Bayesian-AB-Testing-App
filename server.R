@@ -6,31 +6,31 @@ library(coda)
 shinyServer(function(input, output){
   simul <- reactive({input$nsims})
   output$plot <- renderPlot({
-    # posterior for the control group
+    #posterior for the control group
     a1 <- input$alpha + input$cs
     b1 <- input$beta + input$cf
     
-    # posterior for the test group
+    #posterior for the test group
     a2 <- input$alpha + input$ts
     b2 <- input$beta + input$tf
     
-    # beta-binomial simulation for the control group
+    #beta-binomial simulation for the control group
     rb1 <- repeatable(rbeta, seed = 12345)
     m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
     
-    # beta-binomial simulation for the test group
+    #beta-binomial simulation for the test group
     rb2 <- repeatable(rbeta, seed = 12345)
     m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
     
-    # combine into a dataframe
+    #combine into a dataframe
     control <- data.frame(data = m1, tag = "control", stringsAsFactors = FALSE)
     test <- data.frame(data = m2, tag = "test", stringsAsFactors = FALSE)
     total <- rbind(control, test)
     
-    # calculate mean of each group
+    #calculate mean of each group
     group_means <- ddply(total, "tag", summarize, mean = mean(data), sd = sd(data))
     
-    # control and test histograms
+    #control and test histograms
     g <- ggplot(total, aes(data, fill = tag)) + 
       geom_histogram(alpha = 0.5, aes(y = ..density..), position = "identity") + 
       geom_vline(data = group_means, aes(xintercept = mean, colour = tag), linetype = "dashed", size = 1) + 
@@ -60,7 +60,7 @@ shinyServer(function(input, output){
   output$summary1 <- renderPrint({
     if (input$hpdi)
     {
-      # posterior for the control group
+      #posterior for the control group
       a1 <- input$alpha + input$cs
       b1 <- input$beta + input$cf
       rb1 <- repeatable(rbeta, seed = 12345)
@@ -73,7 +73,7 @@ shinyServer(function(input, output){
   output$summary2 <- renderPrint({
     if (input$hpdi)
     {
-      # posterior for the test group
+      #posterior for the test group
       a2 = input$alpha + input$ts
       b2 = input$beta + input$tf
       rb2 <- repeatable(rbeta, seed = 12345)
@@ -86,7 +86,7 @@ shinyServer(function(input, output){
   output$summary3 <- renderPrint({
     if (input$qbpi)
     {
-      # posterior for the control group
+      #posterior for the control group
       a1 <- input$alpha + input$cs
       b1 <- input$beta + input$cf
       rb1 <- repeatable(rbeta, seed = 12345)
@@ -99,7 +99,7 @@ shinyServer(function(input, output){
   output$summary4 <- renderPrint({
     if (input$qbpi)
     {
-      # posterior for the test group
+      #posterior for the test group
       a2 <- input$alpha + input$ts
       b2 <- input$beta + input$tf
       rb2 <- repeatable(rbeta, seed = 12345)
@@ -110,23 +110,23 @@ shinyServer(function(input, output){
   })
   
   output$diff <- renderPlot({
-    # posterior for the control group
+    #posterior for the control group
     a1 <- input$alpha + input$cs
     b1 <- input$beta + input$cf
     
-    # posterior for the test group
+    #posterior for the test group
     a2 <- input$alpha + input$ts
     b2 <- input$beta + input$tf
     
-    # beta-binomial simulation for the control group
+    #beta-binomial simulation for the control group
     rb1 <- repeatable(rbeta, seed = 12345)
     m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
     
-    # beta-binomial simulation for the test group
+    #beta-binomial simulation for the test group
     rb2 <- repeatable(rbeta, seed = 12345)
     m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
     
-    # test-control difference histogram
+    #test-control difference histogram
     test_control <- data.frame(difference = m2 - m1)
     total_mean <- mean(m2-m1)
     p <- ggplot(test_control, aes(x = difference)) + geom_histogram(alpha = 0.5, aes(y = ..density..), position = "identity") + ylab("Density") + xlab("Difference") + 
@@ -152,19 +152,19 @@ shinyServer(function(input, output){
   output$summary5 <- renderPrint({
     if (input$hpdi)
     {
-      # posterior for the control group
+      #posterior for the control group
       a1 <- input$alpha + input$cs
       b1 <- input$beta + input$cf
       
-      # posterior for the test group
+      #posterior for the test group
       a2 <- input$alpha + input$ts
       b2 <- input$beta + input$tf
       
-      # beta-binomial simulation for the control group
+      #beta-binomial simulation for the control group
       rb1 <- repeatable(rbeta, seed = 12345)
       m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
       
-      # beta-binomial simulation for the test group
+      #beta-binomial simulation for the test group
       rb2 <- repeatable(rbeta, seed = 12345)
       m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
       
@@ -177,19 +177,19 @@ shinyServer(function(input, output){
   output$summary6 <- renderPrint({
     if (input$qbpi)
     {
-      # posterior for the control group
+      #posterior for the control group
       a1 = input$alpha + input$cs
       b1 = input$beta + input$cf
       
-      # posterior for the test group
+      #posterior for the test group
       a2 = input$alpha + input$ts
       b2 = input$beta + input$tf
       
-      # beta-binomial simulation for the control group
+      #beta-binomial simulation for the control group
       rb1 <- repeatable(rbeta, seed = 12345)
       m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
       
-      # beta-binomial simulation for the test group
+      #beta-binomial simulation for the test group
       rb2 <- repeatable(rbeta, seed = 12345)
       m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
       
@@ -200,45 +200,45 @@ shinyServer(function(input, output){
   })
   
   output$rev <- renderPrint({
-    # posterior for the control group
+    #posterior for the control group
     a1 = input$alpha + input$cs
     b1 = input$beta + input$cf
     
-    # posterior for the test group
+    #posterior for the test group
     a2 = input$alpha + input$ts
     b2 = input$beta + input$tf
     
-    # beta-binomial simulation for the control group
+    #beta-binomial simulation for the control group
     rb1 <- repeatable(rbeta, seed = 12345)
     m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
     
-    # beta-binomial simulation for the test group
+    #beta-binomial simulation for the test group
     rb2 <- repeatable(rbeta, seed = 12345)
     m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
     
-    # average difference between test and control
+    #average difference between test and control
     d <- m2-m1
     print(mean(d))
   })
   
   output$bet <- renderPrint({
-    # posterior for the control group
+    #posterior for the control group
     a1 = input$alpha + input$cs
     b1 = input$beta + input$cf
     
-    # posterior for the test group
+    #posterior for the test group
     a2 = input$alpha + input$ts
     b2 = input$beta + input$tf
     
-    # beta-binomial simulation for the control group
+    #beta-binomial simulation for the control group
     rb1 <- repeatable(rbeta, seed = 12345)
     m1 <- rb1(simul(), shape1 = a1, shape2 = b1)
     
-    # beta-binomial simulation for the test group
+    #beta-binomial simulation for the test group
     rb2 <- repeatable(rbeta, seed = 12345)
     m2 <- rb2(simul(), shape1 = a2, shape2 = b2)
     
-    # probability that test performs better than control
+    #probability that test performs better than control
     d <- m2-m1
     print(mean(d > 0))
   })
