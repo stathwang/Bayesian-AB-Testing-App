@@ -3,7 +3,7 @@ library(ggplot2)
 
 shinyUI(fluidPage(
   
-  # application title
+  #application title
   titlePanel("Bayesian A/B Testing Calculator"),
   h3("The Beta-Bernoulli Model"),
   
